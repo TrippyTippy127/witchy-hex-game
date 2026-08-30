@@ -157,3 +157,21 @@ body {
 .inventory-item button:hover {
   background-color: #80628d;
 }
+
+#return-home-button {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 18px;
+
+  background-color: #654f70;
+  color: #f3edf7;
+
+  border: 1px solid #9879a8;
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+#return-home-button:hover {
+  background-color: #80628d;
+}

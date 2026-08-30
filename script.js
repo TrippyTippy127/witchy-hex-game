@@ -29,6 +29,11 @@ const tileContents = [
 ];
 const inventory = [];
 let backpackCapacity = 5;
+const storage = {
+  herb: 0,
+  mushroom: 0,
+  rock: 0
+};
 
 function getBackpackTotal() {
   return inventory.length;
@@ -155,6 +160,12 @@ function updateInventoryDisplay() {
   });
 }
 
+function updateStorageDisplay() {
+    document.getElementById("storage-herb").textContent = storage.herb;
+    document.getElementById("storage-mushroom").textContent = storage.mushroom;
+    document.getElementById("storage-rock").textContent = storage.rock;
+}
+
 hexTiles.forEach((tile) => {
   tile.addEventListener("click", () => {
 
@@ -185,3 +196,20 @@ hexTiles.forEach((tile) => {
 
   });
 });
+
+const returnHomeButton = document.getElementById("return-home-button");
+
+returnHomeButton.addEventListener("click", () => {
+  returnHome();
+});
+
+function returnHome() {
+  inventory.forEach((item) => {
+    storage[item.type] += 1;
+  });
+
+  inventory.length = 0;
+
+  updateInventoryDisplay();
+  updateStorageDisplay();
+}
