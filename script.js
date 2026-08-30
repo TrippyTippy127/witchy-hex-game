@@ -19,11 +19,25 @@ navButtons.forEach((button) => {
 });
 
 const hexTiles = document.querySelectorAll(".hex-tile");
+const tileContents = [
+  "🌿",
+  "🍄",
+  "🪨",
+  "🐸",
+  "⚠️",
+  "🌱"
+];
 
 function getTile(row, col) {
   return document.querySelector(
     `.hex-tile[data-row="${row}"][data-col="${col}"]`
   );
+}
+
+function getRandomTileContent() {
+  const randomIndex = Math.floor(Math.random() * tileContents.length);
+
+  return tileContents[randomIndex];
 }
 
 function getNeighbors(tile) {
@@ -73,7 +87,8 @@ hexTiles.forEach((tile) => {
     });
 
     if (hasExploredNeighbor) {
-      tile.classList.add("explored");
+        tile.classList.add("explored");
+        tile.textContent = getRandomTileContent();
     }
 
   });
