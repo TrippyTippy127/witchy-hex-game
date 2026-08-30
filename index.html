@@ -21,29 +21,34 @@
     </div>
   </header>
 
-  <main class="game-layout">
+  <nav class="game-nav">
+    <button data-panel="map-panel">Map</button>
+    <button data-panel="inventory-panel">Inventory</button>
+    <button data-panel="orders-panel">Orders</button>
+    <button data-panel="brew-panel">Brew</button>
+  </nav>
 
-    <section class="map-panel">
+  <main class="game-screen">
+
+    <section id="map-panel" class="game-panel active">
       <h2>Explore</h2>
-
-      <div class="hex-map">
-        <p>Hex map goes here.</p>
-      </div>
+      <p>The hex map will live here.</p>
     </section>
 
-    <aside class="side-panel">
+    <section id="inventory-panel" class="game-panel">
+      <h2>Inventory</h2>
+      <p>Your collected ingredients will appear here.</p>
+    </section>
 
-      <section class="inventory-panel">
-        <h2>Backpack</h2>
-        <p>Your collected ingredients will appear here.</p>
-      </section>
+    <section id="orders-panel" class="game-panel">
+      <h2>Orders</h2>
+      <p>Your customer orders will appear here.</p>
+    </section>
 
-      <section class="orders-panel">
-        <h2>Orders</h2>
-        <p>Customer orders will appear here.</p>
-      </section>
-
-    </aside>
+    <section id="brew-panel" class="game-panel">
+      <h2>Brew</h2>
+      <p>Your cauldron and recipes will live here.</p>
+    </section>
 
   </main>
 
