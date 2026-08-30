@@ -127,3 +127,33 @@ body {
 .hex-tile:not(.explored):hover {
   background-color: #433b4b;
 }
+
+.inventory-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  max-width: 300px;
+  margin-bottom: 10px;
+  padding: 10px 14px;
+
+  background-color: #30253a;
+  border: 1px solid #654f70;
+  border-radius: 8px;
+}
+
+.inventory-item button {
+  padding: 6px 10px;
+
+  background-color: #654f70;
+  color: #f3edf7;
+
+  border: none;
+  border-radius: 6px;
+
+  cursor: pointer;
+}
+
+.inventory-item button:hover {
+  background-color: #80628d;
+}

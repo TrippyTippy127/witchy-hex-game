@@ -27,15 +27,11 @@ const tileContents = [
   { type: "danger", icon: "⚠️", collectible: false },
   { type: "empty", icon: "🌱", collectible: false }
 ];
-const inventory = {
-  herb: 0,
-  mushroom: 0,
-  rock: 0
-};
+const inventory = [];
 let backpackCapacity = 5;
 
 function getBackpackTotal() {
-  return inventory.herb + inventory.mushroom + inventory.rock;
+  return inventory.length;
 }
 
 
@@ -85,13 +81,24 @@ function getNeighbors(tile) {
 }
 
 function collectResource(tile) {
-  const resource = tile.dataset.content;
+  const resourceType = tile.dataset.content;
 
   if (getBackpackTotal() >= backpackCapacity) {
     return;
   }
 
-  inventory[resource] += 1;
+  const resourceInfo = tileContents.find((item) => {
+    return item.type === resourceType;
+  });
+
+  const collectedItem = {
+    type: resourceType,
+    icon: resourceInfo.icon,
+    sourceRow: Number(tile.dataset.row),
+    sourceCol: Number(tile.dataset.col)
+  };
+
+  inventory.push(collectedItem);
 
   tile.textContent = "";
   tile.dataset.collectible = "false";
@@ -99,13 +106,53 @@ function collectResource(tile) {
   updateInventoryDisplay();
 }
 
+function dropItem(index) {
+    const item = inventory[index];
+
+    const sourceTile = getTile(item.sourceRow, item.sourceCol);
+
+    sourceTile.textContent = item.icon;
+    sourceTile.dataset.content = item.type;
+    sourceTile.dataset.collectible = "true";
+
+    inventory.splice(index, 1);
+
+    updateInventoryDisplay();
+  }
+
 function updateInventoryDisplay() {
-  document.getElementById("herb-count").textContent = inventory.herb;
-  document.getElementById("mushroom-count").textContent = inventory.mushroom;
-  document.getElementById("rock-count").textContent = inventory.rock;
-  
+  const inventoryList = document.getElementById("inventory-list");
+
   document.getElementById("backpack-count").textContent = getBackpackTotal();
   document.getElementById("backpack-capacity").textContent = backpackCapacity;
+
+  inventoryList.innerHTML = "";
+
+  if (inventory.length === 0) {
+    inventoryList.innerHTML = "<p>Your backpack is empty.</p>";
+    return;
+  }
+
+  inventory.forEach((item, index) => {
+    const inventoryItem = document.createElement("div");
+
+    inventoryItem.classList.add("inventory-item");
+
+    inventoryItem.innerHTML = `
+      <span>${item.icon} ${item.type}</span>
+    `;
+
+    const dropButton = document.createElement("button");
+
+    dropButton.textContent = "Drop";
+
+    dropButton.addEventListener("click", () => {
+      dropItem(index);
+    });
+
+    inventoryItem.appendChild(dropButton);
+    inventoryList.appendChild(inventoryItem);
+  });
 }
 
 hexTiles.forEach((tile) => {
