@@ -99,7 +99,7 @@ body {
 .hex-tile {
   width: 104px;
   height: 120px;
-  background-color: #5f7a4d;
+  background-color: #302b36;
 
   clip-path: polygon(
     50% 0%,
@@ -109,4 +109,16 @@ body {
     0% 75%,
     0% 25%
   );
+}
+
+.hex-tile.explored {
+  background-color: #5f7a4d;
+}
+
+.hex-tile:not(.explored) {
+  cursor: pointer;
+}
+
+.hex-tile:not(.explored):hover {
+  background-color: #433b4b;
 }
