@@ -32,6 +32,11 @@ const inventory = {
   mushroom: 0,
   rock: 0
 };
+let backpackCapacity = 5;
+
+function getBackpackTotal() {
+  return inventory.herb + inventory.mushroom + inventory.rock;
+}
 
 
 function getTile(row, col) {
@@ -82,6 +87,10 @@ function getNeighbors(tile) {
 function collectResource(tile) {
   const resource = tile.dataset.content;
 
+  if (getBackpackTotal() >= backpackCapacity) {
+    return;
+  }
+
   inventory[resource] += 1;
 
   tile.textContent = "";
@@ -94,6 +103,9 @@ function updateInventoryDisplay() {
   document.getElementById("herb-count").textContent = inventory.herb;
   document.getElementById("mushroom-count").textContent = inventory.mushroom;
   document.getElementById("rock-count").textContent = inventory.rock;
+  
+  document.getElementById("backpack-count").textContent = getBackpackTotal();
+  document.getElementById("backpack-capacity").textContent = backpackCapacity;
 }
 
 hexTiles.forEach((tile) => {
