@@ -1,6 +1,16 @@
 const navButtons = document.querySelectorAll(".game-nav button");
 const panels = document.querySelectorAll(".game-panel");
 
+const startScreen = document.getElementById("start-screen");
+const gameContainer = document.getElementById("game-container");
+const newGameButton = document.getElementById("new-game-button");
+const loadGameButton = document.getElementById("load-game-button");
+
+newGameButton.addEventListener("click", () => {
+  startScreen.classList.add("hidden");
+  gameContainer.classList.remove("hidden");
+});
+
 navButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const targetPanel = button.dataset.panel;

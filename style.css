@@ -186,3 +186,47 @@ body {
   border: 1px solid #654f70;
   border-radius: 8px;
 }
+
+.start-screen {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+}
+
+.start-screen h1 {
+  margin-bottom: 30px;
+  font-size: 40px;
+}
+
+.start-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  width: 220px;
+}
+
+.start-menu button {
+  padding: 12px 18px;
+
+  background-color: #30253a;
+  color: #f3edf7;
+
+  border: 1px solid #654f70;
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.start-menu button:hover {
+  background-color: #44324f;
+}
+
+.hidden {
+  display: none;
+}

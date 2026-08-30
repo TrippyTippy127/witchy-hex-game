@@ -12,93 +12,104 @@
 
 <body>
 
-  <header class="top-bar">
-    <h1>Witchy Hex Game</h1>
+    <section id="start-screen" class="start-screen">
+        <h1>Witchy Hex Game</h1>
 
-    <div class="player-stats">
-      <span>Gold: 0</span>
-      <span>Reputation: 0</span>
+        <div class="start-menu">
+            <button id="new-game-button">New Game</button>
+            <button id="load-game-button">Load Game</button>
+        </div>
+    </section>
+
+    <div id="game-container" class="hidden">
+        <header class="top-bar">
+            <h1>Witchy Hex Game</h1>
+
+            <div class="player-stats">
+                <span>Gold: 0</span>
+                <span>Reputation: 0</span>
+            </div>
+        </header>
+
+        <nav class="game-nav">
+            <button class="active" data-panel="map-panel">Map</button>
+            <button data-panel="inventory-panel">Inventory</button>
+            <button data-panel="orders-panel">Orders</button>
+            <button data-panel="brew-panel">Brew</button>
+        </nav>
+
+        <div id="game-message" class="game-message">
+            Ready to explore.
+        </div>
+
+        <main class="game-screen">
+
+            <section id="map-panel" class="game-panel active">
+                <h2>Explore</h2>
+
+                <div class="hex-map">
+
+                    <div class="hex-row">
+                        <div class="hex-tile" data-row="0" data-col="0"></div>
+                        <div class="hex-tile" data-row="0" data-col="1"></div>
+                        <div class="hex-tile" data-row="0" data-col="2"></div>
+                    </div>
+
+                    <div class="hex-row">
+                        <div class="hex-tile" data-row="1" data-col="0"></div>
+                        <div class="hex-tile explored" data-row="1" data-col="1"></div>
+                        <div class="hex-tile" data-row="1" data-col="2"></div>
+                        <div class="hex-tile" data-row="1" data-col="3"></div>
+                    </div>
+
+                    <div class="hex-row">
+                        <div class="hex-tile" data-row="2" data-col="0"></div>
+                        <div class="hex-tile" data-row="2" data-col="1"></div>
+                        <div class="hex-tile" data-row="2" data-col="2"></div>
+                    </div>
+
+                </div>
+
+                <button id="return-home-button">Return Home</button>
+            </section>
+
+            <section id="inventory-panel" class="game-panel">
+                <h2>Inventory</h2>
+
+                <p class="backpack-capacity">
+                     Backpack:
+                    <span id="backpack-count">0</span>
+                    /
+                    <span id="backpack-capacity">5</span>
+                </p>
+
+                <div id="inventory-list">
+                    <p>Your backpack is empty.</p>
+                </div>
+
+                <h3>Storage</h3>
+
+                <div class="storage-list">
+                    <p>🌿 Herb: <span id="storage-herb">0</span></p>
+                    <p>🍄 Mushroom: <span id="storage-mushroom">0</span></p>
+                    <p>🪨 Rock: <span id="storage-rock">0</span></p>
+                </div>
+            </section>
+
+            <section id="orders-panel" class="game-panel">
+                <h2>Orders</h2>
+                <p>Your customer orders will appear here.</p>
+            </section>
+
+            <section id="brew-panel" class="game-panel">
+                <h2>Brew</h2>
+                <p>Your cauldron and recipes will live here.</p>
+            </section>
+        
+        </main>
     </div>
-  </header>
 
-  <nav class="game-nav">
-    <button class="active" data-panel="map-panel">Map</button>
-    <button data-panel="inventory-panel">Inventory</button>
-    <button data-panel="orders-panel">Orders</button>
-    <button data-panel="brew-panel">Brew</button>
-  </nav>
-
-<div id="game-message" class="game-message">
-  Ready to explore.
-</div>
-
-  <main class="game-screen">
-
-    <section id="map-panel" class="game-panel active">
-        <h2>Explore</h2>
-
-        <div class="hex-map">
-
-            <div class="hex-row">
-                <div class="hex-tile" data-row="0" data-col="0"></div>
-                <div class="hex-tile" data-row="0" data-col="1"></div>
-                <div class="hex-tile" data-row="0" data-col="2"></div>
-            </div>
-
-            <div class="hex-row">
-                <div class="hex-tile" data-row="1" data-col="0"></div>
-                <div class="hex-tile explored" data-row="1" data-col="1"></div>
-                <div class="hex-tile" data-row="1" data-col="2"></div>
-                <div class="hex-tile" data-row="1" data-col="3"></div>
-            </div>
-
-            <div class="hex-row">
-                <div class="hex-tile" data-row="2" data-col="0"></div>
-                <div class="hex-tile" data-row="2" data-col="1"></div>
-                <div class="hex-tile" data-row="2" data-col="2"></div>
-            </div>
-
-        </div>
-
-        <button id="return-home-button">Return Home</button>
-    </section>
-
-    <section id="inventory-panel" class="game-panel">
-        <h2>Inventory</h2>
-
-        <p class="backpack-capacity">
-            Backpack:
-            <span id="backpack-count">0</span>
-            /
-            <span id="backpack-capacity">5</span>
-        </p>
-
-        <div id="inventory-list">
-            <p>Your backpack is empty.</p>
-        </div>
-
-        <h3>Storage</h3>
-
-        <div class="storage-list">
-            <p>🌿 Herb: <span id="storage-herb">0</span></p>
-            <p>🍄 Mushroom: <span id="storage-mushroom">0</span></p>
-            <p>🪨 Rock: <span id="storage-rock">0</span></p>
-        </div>
-    </section>
-
-    <section id="orders-panel" class="game-panel">
-      <h2>Orders</h2>
-      <p>Your customer orders will appear here.</p>
-    </section>
-
-    <section id="brew-panel" class="game-panel">
-      <h2>Brew</h2>
-      <p>Your cauldron and recipes will live here.</p>
-    </section>
-
-  </main>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
-
+    
 </html>
