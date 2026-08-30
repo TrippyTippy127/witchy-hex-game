@@ -6,9 +6,22 @@ const gameContainer = document.getElementById("game-container");
 const newGameButton = document.getElementById("new-game-button");
 const loadGameButton = document.getElementById("load-game-button");
 
+const newGameScreen = document.getElementById("new-game-screen");
+const saveNameInput = document.getElementById("save-name-input");
+const createGameButton = document.getElementById("create-game-button");
+const cancelNewGameButton = document.getElementById("cancel-new-game-button");
+
 newGameButton.addEventListener("click", () => {
   startScreen.classList.add("hidden");
-  gameContainer.classList.remove("hidden");
+  newGameScreen.classList.remove("hidden");
+  saveNameInput.focus();
+});
+
+cancelNewGameButton.addEventListener("click", () => {
+  newGameScreen.classList.add("hidden");
+  startScreen.classList.remove("hidden");
+
+  saveNameInput.value = "";
 });
 
 navButtons.forEach((button) => {
@@ -45,6 +58,81 @@ const storage = {
   rock: 0
 };
 const gameMessage = document.getElementById("game-message");
+
+const maxSaveSlots = 5;
+let currentSaveSlot = null;
+
+function getSaveKey(slotNumber) {
+  return `witchyHexSave${slotNumber}`;
+}
+
+function findFirstEmptySaveSlot() {
+  for (let slot = 1; slot <= maxSaveSlots; slot++) {
+    const saveData = localStorage.getItem(getSaveKey(slot));
+
+    if (saveData === null) {
+      return slot;
+    }
+  }
+
+  return null;
+}
+
+function createDefaultGameState(saveName) {
+  return {
+    saveName: saveName,
+    day: 1,
+    phase: "exploration",
+    movesRemaining: 20,
+
+    gold: 0,
+    reputation: 0,
+
+    backpackCapacity: 5,
+
+    inventory: [],
+
+    storage: {
+      herb: 0,
+      mushroom: 0,
+      rock: 0
+    },
+
+    critters: [],
+    upgrades: [],
+    recipes: [],
+    orders: []
+  };
+}
+
+createGameButton.addEventListener("click", () => {
+  const saveName = saveNameInput.value.trim();
+
+  if (saveName === "") {
+    return;
+  }
+
+  const emptySlot = findFirstEmptySaveSlot();
+
+  if (emptySlot === null) {
+    alert("All save slots are full.");
+    return;
+  }
+
+  const newGameState = createDefaultGameState(saveName);
+
+  localStorage.setItem(
+    getSaveKey(emptySlot),
+    JSON.stringify(newGameState)
+  );
+
+  currentSaveSlot = emptySlot;
+
+  newGameScreen.classList.add("hidden");
+  gameContainer.classList.remove("hidden");
+
+  saveNameInput.value = "";
+});
 
 function showMessage(message) {
   gameMessage.textContent = message;

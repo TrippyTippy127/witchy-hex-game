@@ -230,3 +230,20 @@ body {
 .hidden {
   display: none;
 }
+
+.start-menu input {
+  padding: 12px 14px;
+
+  background-color: #211a27;
+  color: #f3edf7;
+
+  border: 1px solid #654f70;
+  border-radius: 8px;
+
+  font-size: 16px;
+}
+
+.start-menu input:focus {
+  outline: none;
+  border-color: #9879a8;
+}
