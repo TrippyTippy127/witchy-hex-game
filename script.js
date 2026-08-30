@@ -9,6 +9,11 @@ navButtons.forEach((button) => {
       panel.classList.remove("active");
     });
 
+    navButtons.forEach((navButton) => {
+      navButton.classList.remove("active");
+    });
+
     document.getElementById(targetPanel).classList.add("active");
+    button.classList.add("active");
   });
 });
