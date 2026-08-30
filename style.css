@@ -175,3 +175,14 @@ body {
 #return-home-button:hover {
   background-color: #80628d;
 }
+
+.game-message {
+  margin: 16px 24px 0;
+  padding: 10px 14px;
+
+  background-color: #30253a;
+  color: #f3edf7;
+
+  border: 1px solid #654f70;
+  border-radius: 8px;
+}

@@ -34,6 +34,11 @@ const storage = {
   mushroom: 0,
   rock: 0
 };
+const gameMessage = document.getElementById("game-message");
+
+function showMessage(message) {
+  gameMessage.textContent = message;
+}
 
 function getBackpackTotal() {
   return inventory.length;
@@ -89,7 +94,8 @@ function collectResource(tile) {
   const resourceType = tile.dataset.content;
 
   if (getBackpackTotal() >= backpackCapacity) {
-    return;
+  showMessage("🎒 Your backpack is full!");
+  return;
   }
 
   const resourceInfo = tileContents.find((item) => {
@@ -104,6 +110,7 @@ function collectResource(tile) {
   };
 
   inventory.push(collectedItem);
+  showMessage(`${resourceInfo.icon} ${resourceType} added to your backpack.`);
 
   tile.textContent = "";
   tile.dataset.collectible = "false";
@@ -121,6 +128,7 @@ function dropItem(index) {
     sourceTile.dataset.collectible = "true";
 
     inventory.splice(index, 1);
+    showMessage(`${item.icon} ${item.type} dropped.`);
 
     updateInventoryDisplay();
   }
@@ -204,6 +212,8 @@ returnHomeButton.addEventListener("click", () => {
 });
 
 function returnHome() {
+  const itemsStored = inventory.length;
+  
   inventory.forEach((item) => {
     storage[item.type] += 1;
   });
@@ -212,4 +222,6 @@ function returnHome() {
 
   updateInventoryDisplay();
   updateStorageDisplay();
+
+  showMessage(`🏠 Returned home with ${itemsStored} item(s).`);
 }
