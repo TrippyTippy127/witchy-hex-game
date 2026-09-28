@@ -10,6 +10,9 @@ const newGameScreen = document.getElementById("new-game-screen");
 const saveNameInput = document.getElementById("save-name-input");
 const createGameButton = document.getElementById("create-game-button");
 const cancelNewGameButton = document.getElementById("cancel-new-game-button");
+const loadGameScreen = document.getElementById("load-game-screen");
+const saveSlotsContainer = document.getElementById("save-slots");
+const backFromLoadButton = document.getElementById("back-from-load-button");
 
 newGameButton.addEventListener("click", () => {
   startScreen.classList.add("hidden");
@@ -61,10 +64,80 @@ const gameMessage = document.getElementById("game-message");
 
 const maxSaveSlots = 5;
 let currentSaveSlot = null;
+let gameState = null;
 
 function getSaveKey(slotNumber) {
   return `witchyHexSave${slotNumber}`;
 }
+
+function getSaveData(slotNumber) {
+    const savedData = localStorage.getItem(getSaveKey(slotNumber));
+
+    if (savedData === null) {
+        return null;
+    }
+
+    try {
+        return JSON.parse(savedData);
+    } catch (error) {
+        console.error(`Could not read save slot ${slotNumber}:`, error);
+        return null;
+    }
+}
+  
+function renderSaveSlots() {
+    saveSlotsContainer.innerHTML = "";
+
+    for (let slotNumber = 1; slotNumber <= maxSaveSlots; slotNumber++) {
+        const saveData = getSaveData(slotNumber);
+
+        const slotElement = document.createElement("div");
+        slotElement.classList.add("save-slot");
+
+        if (saveData === null) {
+            slotElement.innerHTML = `
+                <div>
+                    <strong>Slot ${slotNumber}</strong>
+                    <p>Empty</p>
+                </div>
+            `;
+        } else {
+            const saveInfo = document.createElement("div");
+
+            const saveTitle = document.createElement("strong");
+            saveTitle.textContent = `Slot ${slotNumber}: ${saveData.saveName || "Unnamed Save"}`;
+
+            const saveDay = document.createElement("p");
+            saveDay.textContent = `Day ${saveData.day || 1}`;
+
+            saveInfo.appendChild(saveTitle);
+            saveInfo.appendChild(saveDay);
+
+            const buttonContainer = document.createElement("div");
+            buttonContainer.classList.add("save-slot-buttons");
+
+            const loadButton = document.createElement("button");
+            loadButton.textContent = "Load";
+            loadButton.addEventListener("click", function () {
+                loadSave(slotNumber);
+            });
+
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.addEventListener("click", function () {
+                deleteSave(slotNumber);
+            });
+
+            buttonContainer.appendChild(loadButton);
+            buttonContainer.appendChild(deleteButton);
+
+            slotElement.appendChild(saveInfo);
+            slotElement.appendChild(buttonContainer);
+        }
+
+        saveSlotsContainer.appendChild(slotElement);
+      }
+    }
 
 function findFirstEmptySaveSlot() {
   for (let slot = 1; slot <= maxSaveSlots; slot++) {
@@ -119,20 +192,63 @@ createGameButton.addEventListener("click", () => {
     return;
   }
 
-  const newGameState = createDefaultGameState(saveName);
+  gameState = createDefaultGameState(saveName);
+  currentSaveSlot = emptySlot;
 
   localStorage.setItem(
-    getSaveKey(emptySlot),
-    JSON.stringify(newGameState)
+    getSaveKey(currentSaveSlot),
+    JSON.stringify(gameState)
   );
-
-  currentSaveSlot = emptySlot;
 
   newGameScreen.classList.add("hidden");
   gameContainer.classList.remove("hidden");
 
   saveNameInput.value = "";
 });
+
+function loadSave(slotNumber) {
+    const saveData = getSaveData(slotNumber);
+
+    if (saveData === null) {
+        showMessage("That save slot is empty.");
+        return;
+    }
+
+    gameState = saveData;
+    currentSaveSlot = slotNumber;
+
+    loadGameScreen.classList.add("hidden");
+    startScreen.classList.add("hidden");
+    newGameScreen.classList.add("hidden");
+    gameContainer.classList.remove("hidden");
+
+    showMessage(`Loaded ${gameState.saveName}.`);
+}
+
+function deleteSave(slotNumber) {
+    const saveData = getSaveData(slotNumber);
+
+    if (saveData === null) {
+        return;
+    }
+
+    const confirmed = confirm(
+        `Delete "${saveData.saveName}" from Slot ${slotNumber}? This cannot be undone.`
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    localStorage.removeItem(getSaveKey(slotNumber));
+
+    if (currentSaveSlot === slotNumber) {
+        currentSaveSlot = null;
+        gameState = null;
+    }
+
+    renderSaveSlots();
+}
 
 function showMessage(message) {
   gameMessage.textContent = message;
@@ -323,3 +439,15 @@ function returnHome() {
 
   showMessage(`🏠 Returned home with ${itemsStored} item(s).`);
 }
+
+loadGameButton.addEventListener("click", function () {
+    startScreen.classList.add("hidden");
+    loadGameScreen.classList.remove("hidden");
+
+    renderSaveSlots();
+});
+
+backFromLoadButton.addEventListener("click", function () {
+    loadGameScreen.classList.add("hidden");
+    startScreen.classList.remove("hidden");
+});

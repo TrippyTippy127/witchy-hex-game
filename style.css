@@ -247,3 +247,40 @@ body {
   outline: none;
   border-color: #9879a8;
 }
+
+#load-game-screen {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 20px;
+}
+
+#load-game-screen h2 {
+    text-align: center;
+}
+
+#save-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.save-slot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 15px;
+    border: 1px solid #6f6278;
+    border-radius: 8px;
+    background: #211a28;
+}
+
+.save-slot p {
+    margin: 5px 0 0;
+}
+
+.save-slot-buttons {
+    display: flex;
+    gap: 8px;
+}
