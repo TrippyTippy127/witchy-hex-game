@@ -53,13 +53,7 @@ const tileContents = [
   { type: "danger", icon: "⚠️", collectible: false },
   { type: "empty", icon: "🌱", collectible: false }
 ];
-const inventory = [];
-let backpackCapacity = 5;
-const storage = {
-  herb: 0,
-  mushroom: 0,
-  rock: 0
-};
+
 const gameMessage = document.getElementById("game-message");
 
 const maxSaveSlots = 5;
@@ -202,6 +196,9 @@ createGameButton.addEventListener("click", () => {
 
   newGameScreen.classList.add("hidden");
   gameContainer.classList.remove("hidden");
+  
+  updateInventoryDisplay();
+  updateStorageDisplay();
 
   saveNameInput.value = "";
 });
@@ -221,6 +218,9 @@ function loadSave(slotNumber) {
     startScreen.classList.add("hidden");
     newGameScreen.classList.add("hidden");
     gameContainer.classList.remove("hidden");
+
+    updateInventoryDisplay();
+    updateStorageDisplay();
 
     showMessage(`Loaded ${gameState.saveName}.`);
 }
@@ -255,7 +255,7 @@ function showMessage(message) {
 }
 
 function getBackpackTotal() {
-  return inventory.length;
+  return gameState.inventory.length;
 }
 
 
@@ -307,7 +307,7 @@ function getNeighbors(tile) {
 function collectResource(tile) {
   const resourceType = tile.dataset.content;
 
-  if (getBackpackTotal() >= backpackCapacity) {
+  if (getBackpackTotal() >= gameState.backpackCapacity) {
   showMessage("🎒 Your backpack is full!");
   return;
   }
@@ -323,7 +323,7 @@ function collectResource(tile) {
     sourceCol: Number(tile.dataset.col)
   };
 
-  inventory.push(collectedItem);
+  gameState.inventory.push(collectedItem);
   showMessage(`${resourceInfo.icon} ${resourceType} added to your backpack.`);
 
   tile.textContent = "";
@@ -333,7 +333,7 @@ function collectResource(tile) {
 }
 
 function dropItem(index) {
-    const item = inventory[index];
+    const item = gameState.inventory[index];
 
     const sourceTile = getTile(item.sourceRow, item.sourceCol);
 
@@ -341,7 +341,7 @@ function dropItem(index) {
     sourceTile.dataset.content = item.type;
     sourceTile.dataset.collectible = "true";
 
-    inventory.splice(index, 1);
+    gameState.inventory.splice(index, 1);
     showMessage(`${item.icon} ${item.type} dropped.`);
 
     updateInventoryDisplay();
@@ -351,16 +351,16 @@ function updateInventoryDisplay() {
   const inventoryList = document.getElementById("inventory-list");
 
   document.getElementById("backpack-count").textContent = getBackpackTotal();
-  document.getElementById("backpack-capacity").textContent = backpackCapacity;
+  document.getElementById("backpack-capacity").textContent = gameState.backpackCapacity;
 
   inventoryList.innerHTML = "";
 
-  if (inventory.length === 0) {
+  if (gameState.inventory.length === 0) {
     inventoryList.innerHTML = "<p>Your backpack is empty.</p>";
     return;
   }
 
-  inventory.forEach((item, index) => {
+  gameState.inventory.forEach((item, index) => {
     const inventoryItem = document.createElement("div");
 
     inventoryItem.classList.add("inventory-item");
@@ -383,9 +383,9 @@ function updateInventoryDisplay() {
 }
 
 function updateStorageDisplay() {
-    document.getElementById("storage-herb").textContent = storage.herb;
-    document.getElementById("storage-mushroom").textContent = storage.mushroom;
-    document.getElementById("storage-rock").textContent = storage.rock;
+    document.getElementById("storage-herb").textContent = gameState.storage.herb;
+    document.getElementById("storage-mushroom").textContent = gameState.storage.mushroom;
+    document.getElementById("storage-rock").textContent = gameState.storage.rock;
 }
 
 hexTiles.forEach((tile) => {
@@ -426,13 +426,13 @@ returnHomeButton.addEventListener("click", () => {
 });
 
 function returnHome() {
-  const itemsStored = inventory.length;
+  const itemsStored = gameState.inventory.length;
   
-  inventory.forEach((item) => {
-    storage[item.type] += 1;
+  gameState.inventory.forEach((item) => {
+    gameState.storage[item.type] += 1;
   });
 
-  inventory.length = 0;
+  gameState.inventory.length = 0;
 
   updateInventoryDisplay();
   updateStorageDisplay();
